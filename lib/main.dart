@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
-
+import 'package:flutter/services.dart';
+import 'dart:io';
 void main() {
   return runApp(
     MaterialApp(
@@ -10,14 +11,13 @@ void main() {
           title: Center(
             child: Text('Dicee'),
           ),
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.red[700],
         ),
         body: DicePage(),
       ),
     ),
   );
 }
-
 class DicePage extends StatefulWidget {
   @override
   _DicePageState createState() => _DicePageState();
@@ -26,6 +26,12 @@ class DicePage extends StatefulWidget {
 class _DicePageState extends State<DicePage> {
   int ldice = 1;
   int rdice = 1;
+  void rollboth(){
+    setState(() {
+      ldice = Random().nextInt(6) + 1;
+      rdice = Random().nextInt(6) + 1;
+    });
+    }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -71,6 +77,7 @@ class _DicePageState extends State<DicePage> {
                   child: FlatButton(
                     onPressed: () {
                       setState(() {
+                        HapticFeedback.vibrate();
                         ldice = Random().nextInt(6) + 1;
                       });
                     },
@@ -88,6 +95,7 @@ class _DicePageState extends State<DicePage> {
                   child: FlatButton(
                     onPressed: () {
                       setState(() {
+                        HapticFeedback.vibrate();
                         rdice = Random().nextInt(6) + 1;
                       });
                     },
@@ -125,6 +133,34 @@ class _DicePageState extends State<DicePage> {
                     ),
                   ),
                 ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: RaisedButton(
+                  onPressed: (){
+                    HapticFeedback.vibrate();
+                    rollboth();
+                  },
+
+                textColor: Colors.white,
+                padding: const EdgeInsets.all(0.0),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: <Color>[
+                        Color(0xFF0D47A1),
+                        Color(0xFF1976D2),
+                        Color(0xFF42A5F5),
+                      ],
+                    ),
+                  ),
+                  padding: const EdgeInsets.all(10.0),
+                  child: const Text(
+                      'Tap to roll Dice',
+                      style: TextStyle(fontSize: 20)
+                  ),
+                ),
               ),
             ),
           ],
